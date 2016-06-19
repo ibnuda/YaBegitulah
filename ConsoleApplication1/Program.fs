@@ -1,7 +1,25 @@
-﻿// Learn more about F# at http://fsharp.org
-// See the 'F# Tutorial' project for more help.
+﻿module MiniSuave
+open Suave.Http
+open Suave.Console
+open Suave.Successful
+open Suave.Combinators
+open Suave.Filters
 
 [<EntryPoint>]
 let main argv = 
-    printfn "%A" argv
-    0 // return an integer exit code
+    let request = {Route = ""; Type = Suave.Http.GET}
+    let response = {Content = ""; StatusCode = 200}
+    let context = {Request = request; Response = response}
+
+    let app =
+        Choose [
+            GET >=> Path "/hello" >=> OK "got from /hello"
+            POST >=> Path "/hello" >=> OK "posted to /hello"
+            Path "/foo" >=> Choose [
+                GET >=> OK "got from /foo"
+                POST >=> OK "posted to /foo"
+            ]
+        ]
+    executeInLoop context app
+
+    0
