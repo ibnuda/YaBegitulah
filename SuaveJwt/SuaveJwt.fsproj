@@ -45,6 +45,7 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Encodings.fs" />
     <Compile Include="SuaveJSON.fs" />
+    <Compile Include="KeyStore.fs" />
     <Compile Include="JwtToken.fs" />
     <Compile Include="AuthServer.fs" />
     <Compile Include="Program.fs" />

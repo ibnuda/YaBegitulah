@@ -1,5 +1,5 @@
-﻿open Suave
-open System
+﻿open System
+open Suave.Web
 open AuthServer
 open JwtToken
 
@@ -15,10 +15,10 @@ let main argv =
     }
 
     let identityStore = {
-        GetClaim = IdentityStore.GetClaim
-        IsValidCredential = IdentityStore.IsValidCredential
-        GetSecurityKey = IdentityStore.GetSecurityKey
-        GetSigningCredential = IdentityStore.GetSigningCredential
+        GetClaim = IdentityStore.getClaim
+        IsValidCredential = IdentityStore.isValidCredential
+        GetSecurityKey = KeyStore.securityKey
+        GetSigningCredential = KeyStore.hmacSha256
     }
 
     let audienceWebPart' = audienceWebPart authorizationServerConfig identityStore
