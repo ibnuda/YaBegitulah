@@ -9,3 +9,9 @@ let private audienceStorage =
 let saveAudience (audience : Audience) =
     audienceStorage.Add(audience.ClientId, audience)
     audience |> async.Return
+
+let getAudience clientId =
+    if audienceStorage.ContainsKey(clientId) then
+        Some audienceStorage.[clientId] |> async.Return
+    else
+        None |> async.Return

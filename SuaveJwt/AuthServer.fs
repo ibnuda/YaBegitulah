@@ -22,9 +22,19 @@ type AudienceCreateResponse = {
 type Config = {
     AddAudienceUrlPath : string
     SaveAudience : Audience -> Async<Audience>
+    CreateTokenUrlPath : string
+    GetAudience : string -> Async<Audience option>
+    Issuer : string
+    TokenTimeSpan : TimeSpan
 }
 
-let audienceWebPart config =
+type TokenCreateCredential = {
+    Username : string
+    Password : string
+    ClientId : string
+}
+
+let audienceWebPart config identityStore =
     let toAudienceCreateResponse (audience : Audience) = {
         Base64Secret = audience.Secret.ToString()
         ClientId = audience.ClientId
@@ -44,4 +54,28 @@ let audienceWebPart config =
             } 
         | None -> BAD_REQUEST "Invalid Audience Create Request" ctx
 
-    path config.AddAudienceUrlPath >=> POST >=> tryCreateAudience
+    let tryCreateToken (ctx : HttpContext) =
+        match mapJsonPayload<TokenCreateCredential> ctx.request with
+        | Some tokenCreateCredential ->
+            async {
+                let! audience = config.GetAudience tokenCreateCredential.ClientId
+                match audience with
+                | Some audience ->
+                    let tokenRequest : TokenCreateRequest = {
+                        Issuer = config.Issuer
+                        Username = tokenCreateCredential.Username
+                        Password = tokenCreateCredential.Password
+                        TokenTimeSpan = config.TokenTimeSpan
+                    }
+                    let! token = createToken tokenRequest identityStore audience
+                    match token with
+                    | Some token -> return! JSON token ctx
+                    | None -> return! BAD_REQUEST "Invalid Login Credential" ctx
+                | None -> return! BAD_REQUEST "Invalid Client Id" ctx
+            }
+        | None -> BAD_REQUEST "Invalid Token Create Request" ctx
+
+    choose [
+        path config.AddAudienceUrlPath >=> POST >=> tryCreateAudience
+        path config.CreateTokenUrlPath >=> POST >=> tryCreateToken
+    ]
