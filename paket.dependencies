@@ -1,4 +1,7 @@
 source https://www.nuget.org/api/v2
+nuget FSharp.Control.Reactive
+nuget FSharp.Data
+nuget Http.fs
 nuget Newtonsoft.Json
 nuget Suave
 nuget System.IdentityModel.Tokens.Jwt

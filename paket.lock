@@ -1,7 +1,21 @@
 NUGET
   remote: https://www.nuget.org/api/v2
+    FSharp.Control.Reactive (3.4.1)
+      Rx-Core (>= 2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+      Rx-Linq (>= 2.2.5)
     FSharp.Core (4.0.0.1)
+    FSharp.Data (2.3.1)
+      Zlib.Portable (>= 1.11) - framework: portable-net45+sl5+win8, portable-net45+win8, portable-net45+win8+wp8+wpa81
+    Http.fs (1.5.1)
     Newtonsoft.Json (8.0.3)
-    Suave (1.1.2)
+    Rx-Core (2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+    Rx-Interfaces (2.2.5)
+    Rx-Linq (2.2.5)
+      Rx-Core (>= 2.2.5)
+      Rx-Interfaces (>= 2.2.5)
+    Suave (1.1.3)
       FSharp.Core (>= 3.1.2.5)
     System.IdentityModel.Tokens.Jwt (4.0.2.206221351)
+    Zlib.Portable (1.11) - framework: portable-net45+sl5+win8, portable-net45+win8, portable-net45+win8+wp8+wpa81

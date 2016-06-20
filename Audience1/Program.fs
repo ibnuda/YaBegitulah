@@ -28,7 +28,7 @@ let main argv =
         | None -> UnAuthorized "Not an admin" |> async.Return
 
     let sample1 = path "/audience1/sample1" >=> jwtAuthenticate jwtConfig (OK "sample 1")
-    let sample2 = path "/audience2/sample2" >=> jwtAuthenticate jwtConfig (OK "ini admin")
+    let sample2 = path "/audience1/sample2" >=> jwtAuthenticate jwtConfig (OK "ini admin")
 
     let config = {
         defaultConfig with bindings = [HttpBinding.mkSimple HTTP "127.0.0.1" 8084]
