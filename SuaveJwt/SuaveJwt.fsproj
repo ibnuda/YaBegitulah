@@ -48,6 +48,7 @@
     <Compile Include="KeyStore.fs" />
     <Compile Include="JwtToken.fs" />
     <Compile Include="AuthServer.fs" />
+    <Compile Include="Secure.fs" />
     <Compile Include="Program.fs" />
     <None Include="Script.fsx" />
   </ItemGroup>

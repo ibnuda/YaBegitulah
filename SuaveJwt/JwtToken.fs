@@ -31,6 +31,13 @@ type Token = {
     ExpiresIn : float
 }
 
+type TokenValidationRequest = {
+    Issuer : string
+    SecurityKey : SecurityKey
+    ClientId : string
+    AccessToken : string
+}
+
 let createAudience audienceName =
     let clientId = Guid.NewGuid().ToString()
     let data = Array.zeroCreate 32
@@ -58,3 +65,19 @@ let createToken request identityStore audience =
         else
             return None
     }
+
+let validate validationRequest =
+    let tokenValidationParameters =
+        let validationParams = new TokenValidationParameters()
+        validationParams.ValidAudience <- validationRequest.ClientId
+        validationParams.ValidIssuer <- validationRequest.Issuer
+        validationParams.ValidateLifetime <- true
+        validationParams.ValidateIssuerSigningKey <- true
+        validationParams.IssuerSigningKey <- validationRequest.SecurityKey
+        validationParams
+    try
+        let handler = new JwtSecurityTokenHandler()
+        let principal = handler.ValidateToken(validationRequest.AccessToken, tokenValidationParameters, ref null)
+        principal.Claims |> Choice1Of2
+    with
+        | ex -> ex.Message |> Choice2Of2
